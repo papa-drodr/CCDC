@@ -1,6 +1,6 @@
-# CCDC — Camera Calibration & Distortion Correction
+# CCDC — Camera Calibration, Distortion Correction (& AR)
 
-A simple tool for camera calibration and lens distortion correction using OpenCV and a chessboard pattern.
+A simple tool for camera calibration, lens distortion correction, and 3D axis AR visualization using OpenCV and a chessboard pattern.
 
 ---
 
@@ -8,6 +8,7 @@ A simple tool for camera calibration and lens distortion correction using OpenCV
 
 - **Camera Calibration** — Estimate intrinsic parameters (K) and distortion coefficients from a chessboard video
 - **Distortion Correction** — Rectify lens distortion using calibration results
+- **3D Axis AR** — Estimate camera pose via PnP and overlay X/Y/Z axes on the chessboard in real time
 
 ---
 
@@ -53,14 +54,30 @@ python distortion_correction.py
 - **Space**: Pause
 - **ESC**: Exit
 
+### 3. Pose Estimation & 3D Axis AR
+
+After calibration, paste the output `K` and `dist_coeff` values into `pose_estimation_ar.py`, then:
+
+```bash
+python pose_estimation_ar.py
+```
+
+- **C**: Save AR screenshot to `data/ar_result.png`
+- **Space**: Pause
+- **ESC**: Exit
+
+> The script detects the chessboard in each frame, estimates the camera pose using `cv.solvePnP()`, and draws color-coded 3D axes (X: red, Y: green, Z: blue) with text labels on the board.
+
 ---
 
 ## Calibration Results
 
 **Camera**: iPhone 15 Plus (Action Mode)  
-**Chessboard**: 10×7 inner corners, cell size = 25mm  
+**Chessboard**: 9×6 inner corners, cell size = 25mm  
 **Number of selected images**: 20+  
 **RMS error**: 0.8143
+
+![CC_result](data/CC_result.png)
 
 ### Camera Matrix (K)
 
@@ -95,6 +112,10 @@ python distortion_correction.py
 |----------|-----------|
 | ![original](data/original.png) | ![rectified](data/rectified.png) |
 
+### Pose Estimation & 3D Axis AR
+
+![ar_result](data/ar_result.png)
+
 ---
 
 ## File Structure
@@ -103,8 +124,22 @@ python distortion_correction.py
 CCDC/
 ├── camera_calibration.py     # Calibration script
 ├── distortion_correction.py  # Distortion correction script
+├── pose_estimation_ar.py     # Pose estimation & 3D axis AR script
 ├── data/
-│   ├── original.png          # Screenshot before correction (saved by pressing C)
-│   └── rectified.png         # Screenshot after correction (saved by pressing C)
+│   ├── original.png          # Screenshot before distortion correction (press C)
+│   ├── rectified.png         # Screenshot after distortion correction (press C)
+│   └── ar_result.png         # AR result screenshot (press C)
 └── README.md
 ```
+
+---
+
+## Known Issues
+
+**AR axes rarely appear / position keeps shifting**
+
+- **Cause:** iPhone Action Mode applies internal optical stabilization and lens distortion correction before saving the video. As a result, the calibrated K and distortion coefficients do not reflect the true optical characteristics of the lens, leading to unstable pose estimation.
+
+**Planned fix:** Re-shoot the chessboard video using iPhone standard camera mode (1× lens, no Action Mode) to obtain accurate K and distortion coefficients, then re-run calibration.
+
+**Scheduled after midterm exam (early May)**

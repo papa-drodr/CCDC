@@ -79,9 +79,9 @@ def calib_camera_from_chessboard(
 
 
 if __name__ == "__main__":
-    video_file = "chessboard.mp4"  # ← 내 영상 파일 경로로 수정
-    board_pattern = (9, 6)  # ← 체스보드 내부 코너 수 (칸수 - 1)
-    board_cellsize = 0.025  # ← 칸 크기 [m] (25mm = 0.025)
+    video_file = "chessboard.mp4"
+    board_pattern = (9, 6)  # (n-1, m-1)
+    board_cellsize = 0.025  # [m], (25mm = 0.025)
 
     img_select = select_img_from_video(video_file, board_pattern)
     assert len(img_select) > 0, "There is no selected images!"

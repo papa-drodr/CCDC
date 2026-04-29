@@ -55,12 +55,16 @@ def select_img_from_video(
 def calib_camera_from_chessboard(
     images, board_pattern, board_cellsize, K=None, dist_coeff=None, calib_flags=None
 ):
+    # Criteria for cornerSubPix refinement
+    subpix_criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001)
+
     # Find 2D corner points from given images
     img_points = []
     for img in images:
         gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
         complete, pts = cv.findChessboardCorners(gray, board_pattern)
         if complete:
+            pts = cv.cornerSubPix(gray, pts, (11, 11), (-1, -1), subpix_criteria)
             img_points.append(pts)
     assert len(img_points) > 0
 
@@ -80,7 +84,7 @@ def calib_camera_from_chessboard(
 
 if __name__ == "__main__":
     video_file = "chessboard.mp4"
-    board_pattern = (9, 6)  # (n-1, m-1)
+    board_pattern = (10, 7)  # (n-1, m-1)
     board_cellsize = 0.025  # [m], (25mm = 0.025)
 
     img_select = select_img_from_video(video_file, board_pattern)

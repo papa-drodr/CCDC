@@ -7,13 +7,13 @@ import numpy as np
 video_file = "chessboard.mp4"
 K = np.array(
     [
-        [685.09216986, 0.0, 966.21132282],
-        [0.0, 690.91696396, 559.47592990],
+        [1.12415948e03, 0.0, 6.40625897e02],
+        [0.0, 1.12449519e03, 3.52677124e02],
         [0.0, 0.0, 1.0],
     ]
 )
-dist_coeff = np.array([-0.00965545, -0.00626342, -0.00048078, 0.00610018, 0.01461627])
-board_pattern = (9, 6)
+dist_coeff = np.array([0.25212485, -1.01833791, 0.0017293, -0.00147241, 0.84109214])
+board_pattern = (10, 7)
 board_cellsize = 0.025
 board_criteria = (
     cv.CALIB_CB_ADAPTIVE_THRESH + cv.CALIB_CB_NORMALIZE_IMAGE + cv.CALIB_CB_FAST_CHECK

@@ -6,12 +6,12 @@ import numpy as np
 video_file = "chessboard.mp4"
 K = np.array(
     [
-        [685.09216986, 0.0, 966.21132282],
-        [0.0, 690.91696396, 559.4759299],
+        [1.10906511e03, 0.0, 6.35873599e02],
+        [0.0, 1.10914402e03, 3.63121374e02],
         [0.0, 0.0, 1.0],
     ]
 )
-dist_coeff = np.array([-0.00965545, -0.00626342, -0.00048078, 0.00610018, 0.01461627])
+dist_coeff = np.array([0.22140421, -0.73614716, 0.0021946, -0.00156452, 0.53864716])
 
 
 # Open a video
@@ -46,11 +46,11 @@ while True:
         key = cv.waitKey()
     if key == 27:  # ESC: Exit
         break
-    elif key == ord("\t"):  # Tab: 원본 <-> 보정 토글
+    elif key == ord("\t"):  # Tab: Toggle between Original / Rectified view
         show_rectify = not show_rectify
-    elif key == ord("c"):  # C: 원본 & 보정 이미지 저장
+    elif key == ord("c"):  # C: Save original & rectified images
         os.makedirs("data", exist_ok=True)
-        # 보정 이미지 생성 (map이 없으면 새로 만들기)
+        # Generate rectified image (create map if not yet initialized)
         if map1 is None or map2 is None:
             map1, map2 = cv.initUndistortRectifyMap(
                 K,

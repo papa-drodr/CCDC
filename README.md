@@ -72,35 +72,35 @@ python pose_estimation_ar.py
 
 ## Calibration Results
 
-**Camera**: iPhone 15 Plus (Action Mode)  
-**Chessboard**: 9×6 inner corners, cell size = 25mm  
-**Number of selected images**: 20+  
-**RMS error**: 0.8143
+**Camera**: iPhone 15 Plus (Normal Mode, 1× lens)
+**Chessboard**: 10×7 inner corners, cell size = 25mm
+**Number of selected images**: 43
+**RMS error**: 0.5664
 
 ![CC_result](data/CC_result.png)
 
 ### Camera Matrix (K)
 
 ```
-[[685.09216986,   0.          , 966.21132282],
- [  0.         , 690.91696396, 559.47592990],
- [  0.         ,   0.         ,   1.        ]]
+[[1.10906511e+03, 0.            , 6.35873599e+02],
+ [0.            , 1.10914402e+03, 3.63121374e+02],
+ [0.            , 0.            , 1.            ]]
 ```
 
 | Parameter | Value |
 |-----------|-------|
-| fx | 685.09 px |
-| fy | 690.92 px |
-| cx | 966.21 px |
-| cy | 559.48 px |
+| fx | 1109.07 px |
+| fy | 1109.14 px |
+| cx | 635.87 px |
+| cy | 363.12 px |
 
 ### Distortion Coefficients
 
 | k1 | k2 | p1 | p2 | k3 |
 |----|----|----|----|----|
-| -0.00966 | -0.00626 | -0.00048 | 0.00610 | 0.01462 |
+| 0.22140 | -0.73615 | 0.00219 | -0.00156 | 0.53865 |
 
-> Note: Distortion coefficients are small because iPhone applies internal lens correction before saving video. The calibration itself is valid (RMS < 1.0).
+> Note: Sub-pixel corner refinement (`cv.cornerSubPix`) was applied to improve calibration accuracy.
 
 ---
 
@@ -131,15 +131,3 @@ CCDC/
 │   └── ar_result.png         # AR result screenshot (press C)
 └── README.md
 ```
-
----
-
-## Known Issues
-
-**AR axes rarely appear / position keeps shifting**
-
-- **Cause:** iPhone Action Mode applies internal optical stabilization and lens distortion correction before saving the video. As a result, the calibrated K and distortion coefficients do not reflect the true optical characteristics of the lens, leading to unstable pose estimation.
-
-**Planned fix:** Re-shoot the chessboard video using iPhone standard camera mode (1× lens, no Action Mode) to obtain accurate K and distortion coefficients, then re-run calibration.
-
-**Scheduled after midterm exam (early May)**
